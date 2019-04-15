@@ -2,46 +2,65 @@
 #include <string.h>
 #define ALL_MENU_ELEMENTS 20
 
-struct MNODE {
-   char name[20];
-   char dropDown[20][20];
-   int index;
-   int layer;
-};
+
+
 
 int main(){
+    // Only for testing:
+    int input;
+    int action = 0;
+    int layer = 0;
     while(1){
-        int input;
+        
         scanf("%d", &input);
+        if(input==-1){
+            action=1;
+        }
     //input = getchar();
         //printf("%d",input);
-        menu(input);
+        menu(input, action, layer);
+        
     }
     return 0;
 }
 
+typedef struct MNODE {
+   unsigned char id; //uint8_t
+   const char * title;
+   unsigned char funct_prop;
+   
+   const struct MNODE * branch_next;
+   const struct MNODE * branch_prev;
+   
+   const struct MNODE * node_next;
+   const struct MNODE * node_prev;
+   
+   
+}TNODE;
 
-int menu(int selection){
+int menu(int selection, int action, int layer){
     //char temp[20];
     //scanf("%s" , temp);
     
    // printf(temp);
    
-   struct MNODE all[ALL_MENU_ELEMENTS];
-   struct MNODE telewizor;
-   struct MNODE kuchenka;
-   struct MNODE piekarnik;
+   TNODE all[ALL_MENU_ELEMENTS];
    
-   strcpy(telewizor.name, "C language");
-   telewizor.layer=0;
-   strcpy(telewizor.name, "telewizor");
-   strcpy(kuchenka.name, "kuchenka");
-   strcpy(piekarnik.name, "piekarnik");
+   TNODE siec;
+   TNODE rtc_setup;
+   TNODE rs232;
+   
+//   telewizor.title="Network";
+   siec.title="siec";
+   rtc_setup.title="rtc_setup";
+   rs232.title="rs232";
+   siec.id=0;
    
    
-   all[0]=telewizor;
-   all[1]=kuchenka;
-   all[2]=piekarnik;
+   
+   all[0]=siec;
+   all[1]=rtc_setup;
+   all[2]=rs232;
    int max = 3;
    
    
@@ -51,19 +70,14 @@ int menu(int selection){
     for(int i=0;i<ALL_MENU_ELEMENTS && i<max;i++){
          
          if(i==selection){
-             printf("   >");
+             printf("  > ");
          }else{
              printf("    ");
          }
-         printf(all[i].name);
+         printf(all[i].title);
          
          printf("\n");
     }
-   // while(1){
-     //   char result = getchar();
-       // if(result == 'x')
-         //   printf("X");
-//    }
     
     
 return 0;
