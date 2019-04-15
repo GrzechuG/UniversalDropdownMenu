@@ -10,15 +10,18 @@ struct MNODE {
 };
 
 int main(){
-    char input[20];
-    scanf("%s", input);
-    printf(input);
-
+    while(1){
+        int input;
+        scanf("%d", &input);
+    //input = getchar();
+        //printf("%d",input);
+        menu(input);
+    }
     return 0;
 }
 
 
-int menu(){
+int menu(int selection){
     //char temp[20];
     //scanf("%s" , temp);
     
@@ -40,7 +43,7 @@ int menu(){
    all[1]=kuchenka;
    all[2]=piekarnik;
    int max = 3;
-   int selection = 1;
+   
    
    
    
@@ -56,11 +59,11 @@ int menu(){
          
          printf("\n");
     }
-    while(1){
-        char result = getchar();
-        if(result == 'x')
-            printf("X");
-    }
+   // while(1){
+     //   char result = getchar();
+       // if(result == 'x')
+         //   printf("X");
+//    }
     
     
 return 0;
