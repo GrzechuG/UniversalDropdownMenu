@@ -16,7 +16,7 @@ for line in config.split("\n"):
          name=line.replace(":", "").replace(" ", "")
          nodes.append(name)
          print("TNODE "+name+";")
-         print(name+".title="+name+";")
+         print(name+".title=\""+name+"\";")
          depth = (str(line.count(" ")/4))
 
 
