@@ -72,32 +72,32 @@ for i in range(1,highest):
 
 j=0;
 print("#######################GENERATED:#########################")
-for st in sorted:
+mini_groups = []
+done=[]
+for st1 in structure:
+    tmp = [st1[:].pop()]
 
+    for st2 in structure:
+        if(True):
+             base1=st1[:]
+             base2=st2[:]
 
-            print(st)
-            popped=st[:]
-            popped.pop()
+             n1=base1.pop()
+             n2=base2.pop()
+            # print(st1)
+             if(str(base1)==str(base2) and not n1==n2):
 
-            if(j+1<len(sorted)):
-                if(len(sorted[j+1])==len(st)):
-                    next=sorted[j+1][len(st)-1]
-                else:
-                    next=("null")
-            else:
-                next=("null")
-            if(j-1>0):
-                if(len(sorted[j-1])==len(st)):
-                    prev=sorted[j-1][len(st)-1]
-                else:
-                    prev="null"
+                tmp.append(n2)
+    tmp2 = tmp[:]
+    tmp2.sort()
+    if(not tmp2 in done):
+        done.append(tmp2[:])
+        mini_groups.append(tmp[:])
 
-            else:
-                prev=("null")
+for g in mini_groups:
+    g.sort()
+    print(g)
 
-            print(st[len(st)-1]+"."+"node_next=&"+str(next)+";")
-            print(st[len(st)-1]+"."+"node_prev=&"+str(prev)+";")
-            j+=1
 
 has_next=[]
 has_prev=[]
