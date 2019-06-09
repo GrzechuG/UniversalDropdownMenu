@@ -102,29 +102,24 @@ for g in mini_groups:
 has_next=[]
 has_prev=[]
 for node in nodes:
+    longest=[]
+
     for st in sorted:
         if (node in st):
-            #print(st)
-            try:
-                if not node in has_next:
-                    print(node+".branch_next=&"+st[st.index(node)+1]+";")
-                    has_next.append(node[:])
-            except:
-                pass
+            if len(st)>len(longest):
+                longest=st[:]
+    #print(longest)
+    try:
+        if(longest.index(node)+1>len(longest)):
+            raise Exception;
+        print(node+".branch_next=&"+longest[longest.index(node)+1]+";")
+    except Exception as e:
+        print(node+".branch_next=&"+""+"null;")
+        #print(str(e))
 
-
-
-            try:
-                if not node in has_prev:
-                    print(node+".branch_prev=&"+st[st.index(node)-1]+";")
-                    has_prev.append(node[:])
-                #print(st.index(node))
-            except:
-                pass
-
-for st in sorted:
-    if not node in has_next:
-        print(node+".branch_next=&null;")
-
-    if not node in has_prev:
-        print(node+".branch_prev=&null;")
+    try:
+        if(longest.index(node)-1<0):
+            raise Exception;
+        print(node+".branch_prev=&"+longest[longest.index(node)-1]+";")
+    except:
+        print(node+".branch_prev=&"+"null"+";")
