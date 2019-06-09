@@ -95,8 +95,23 @@ for st1 in structure:
         mini_groups.append(tmp[:])
 
 for g in mini_groups:
-    g.sort()
     print(g)
+    #print(g[0]+".node_prev=&null;")
+    for node in g:
+        try:
+            if(g.index(node)+1>len(g)):
+                raise Exception;
+            print(node+".node_next=&"+g[g.index(node)+1]+";")
+        except Exception as e:
+            print(node+".node_next=&"+""+"null;")
+            #print(str(e))
+
+        try:
+            if(g.index(node)-1<0):
+                raise Exception;
+            print(node+".node_prev=&"+g[g.index(node)-1]+";")
+        except:
+            print(node+".node_prev=&"+"null"+";")
 
 
 has_next=[]
