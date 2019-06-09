@@ -1,6 +1,7 @@
 import sys
+print("\n// Generated using menu generator v1.1 (C) Grzegorz Gajewski Industries")
 config = open("menu.conf", "r").read()
-
+print("\n//Generating nodes 'Objects' and setting up names:")
 nodes=[]
 sets = []
 
@@ -54,7 +55,9 @@ for line in config.split("\n"):
          structure.append(branches[:])
 
 highest=0;
-print("#######################SORTED#########################")
+#print("#######################SORTED#########################")
+
+print("\n//Generating menu node structure:")
 for st in structure:
     #print(st)
     if(len(st)>highest):
@@ -68,10 +71,10 @@ for i in range(1,highest):
 
         if(len(st)==i):
             sorted.append(st[:])
-            print(st)
+            #print(st)
 
 j=0;
-print("#######################GENERATED:#########################")
+
 mini_groups = []
 done=[]
 for st1 in structure:
@@ -95,7 +98,7 @@ for st1 in structure:
         mini_groups.append(tmp[:])
 
 for g in mini_groups:
-    print(g)
+    #print(g)
     #print(g[0]+".node_prev=&null;")
     for node in g:
         try:
@@ -116,6 +119,7 @@ for g in mini_groups:
 
 has_next=[]
 has_prev=[]
+print("\n //Generating menu branch structure:")
 for node in nodes:
     longest=[]
 
