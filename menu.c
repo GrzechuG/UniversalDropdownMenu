@@ -179,23 +179,33 @@ int menu(int action){
         printf("[ %s ]\n",temp -> title);
 
         TNODE * temp2 = actual;
-        //TNODE * temp3 = temp2;
+        TNODE * temp3 = temp2;
+        TNODE * first = actual;
         while(strcmp(temp2 -> title, "null")){
         //  printf("Test");
-          //temp3=temp2;
+          temp3=temp2;
           temp2 = temp2 -> node_prev;
-         if(strcmp(temp2 -> title,"null"))
-          printf("     %s \n", temp2 -> title);
+         if(strcmp(temp2 -> title,"null")){
+          first = temp3;
+          //printf("     %s \n", temp2 -> title);
+        }
        }
 
-        temp2 = actual;
-        printf("  >  %s\n",actual->title);
+        temp2 = temp3;
+
         while(strcmp(temp2 -> title, "null")){
         //  printf("Test");
-          temp2 = temp2 -> node_next;
+
+
           if(strcmp(temp2 -> title,"null")){
+            if(!strcmp(temp2 -> title,actual -> title)){
+              printf("  >  %s\n",actual->title);
+            }else{
               printf("     %s \n", temp2 -> title);
+            }
         }
+        temp2 = temp2 -> node_next;
+
        }
 
         //printf(actual->title);
