@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <string.h>
-#define ALL_MENU_ELEMENTS 20
-#define ALL_BRANCHES 20
+
 
 
 
 int menu_index = 0;
 int menu_branch = 0;
-
+int first=1;
 int main() {
         // Only for testing:
         int index=0;
@@ -41,16 +40,13 @@ typedef struct MNODE {
 
 
 }TNODE;
-
+TNODE * actual;
 int menu(int action){
-        //char temp[20];
-        //scanf("%s" , temp);
 
-        // printf(temp);
 
-        TNODE actual;
+
         TNODE null;
-
+        null.title="null";
         //DANE TWORZACE STRUKTURE:
 
         // Generated using menu generator v1.1 (C) Grzegorz Gajewski Industries
@@ -111,7 +107,7 @@ int menu(int action){
         FLOW.node_next=&null;
         FLOW.node_prev=&BIT;
 
-         //Generating menu branch structure:
+        //Generating menu branch structure:
         MENU.branch_next=&RTC_SETUP;
         MENU.branch_prev=&null;
         SIEC.branch_next=&Numer_IP;
@@ -140,35 +136,45 @@ int menu(int action){
         EXIT.branch_prev=&MENU;
 
 
-
-
+        if(first == 1) {
+                actual=&MENU;
+                first=0;
+        }
 
 
         //KONIEC DANYCH TWORZACYCH STRUKTURE
 
         //LOGIKA MENU:
+      //  printf(actual->title);
         if (action == 1) {
-                menu_index=(menu_index+1)%max;
+                TNODE * temp = actual->node_next;
+                if(strcmp(temp -> title, "null"))
+                    actual = actual->node_next;
 
         }
         if(action == 0) {
-                menu_index=(menu_index-1)%max;
+          TNODE * temp = actual->node_prev;
+          if(strcmp(temp -> title, "null"))
+                actual=actual->node_prev;
 
         }
         if(action == 2) {
-
-                menu_branch++;
+          TNODE * temp = actual->branch_next;
+          if(strcmp(temp -> title, "null"))
+                actual = actual->branch_next;
+                //menu_branch++;
 
         }
         if(action == 3) {
-                menu_branch--;
+          TNODE * temp = actual->branch_prev;
+          if(strcmp(temp -> title, "null"))
+                actual= actual->branch_prev;
 
         }
+        printf(actual->title);
 
 
 
 
         return 0;
 }
-
-void drawMenu();
