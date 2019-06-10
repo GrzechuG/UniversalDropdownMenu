@@ -32,14 +32,15 @@ typedef struct MNODE {
         const char * title;
         unsigned char funct_prop;
 
-        const struct MNODE * branch_next;
-        const struct MNODE * branch_prev;
+         struct MNODE * branch_next;
+         struct MNODE * branch_prev;
 
-        const struct MNODE * node_next;
-        const struct MNODE * node_prev;
+         struct MNODE * node_next;
+         struct MNODE * node_prev;
 
 
 }TNODE;
+
 TNODE * actual;
 int menu(int action){
 
@@ -171,7 +172,34 @@ int menu(int action){
                 actual= actual->branch_prev;
 
         }
-        printf(actual->title);
+
+        // MENU DRAWING:
+
+        TNODE * temp = actual->branch_prev;
+        printf("[ %s ]\n",temp -> title);
+
+        TNODE * temp2 = actual;
+        //TNODE * temp3 = temp2;
+        while(strcmp(temp2 -> title, "null")){
+        //  printf("Test");
+          //temp3=temp2;
+          temp2 = temp2 -> node_prev;
+         if(strcmp(temp2 -> title,"null"))
+          printf("     %s \n", temp2 -> title);
+       }
+
+        temp2 = actual;
+        printf("  >  %s\n",actual->title);
+        while(strcmp(temp2 -> title, "null")){
+        //  printf("Test");
+          temp2 = temp2 -> node_next;
+          if(strcmp(temp2 -> title,"null")){
+              printf("     %s \n", temp2 -> title);
+        }
+       }
+
+        //printf(actual->title);
+
 
 
 
