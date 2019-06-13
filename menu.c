@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
 
 
 
@@ -26,17 +26,22 @@ int main() {
 }
 
 
+int function_exit(int a){
+        printf("%d",a);
+        exit(0);
+        return 0;
 
+}
 typedef struct MNODE {
         unsigned char id; //uint8_t
         const char * title;
-        unsigned char funct_prop;
+        int (*funct_prop)(int);
 
-         struct MNODE * branch_next;
-         struct MNODE * branch_prev;
+        struct MNODE * branch_next;
+        struct MNODE * branch_prev;
 
-         struct MNODE * node_next;
-         struct MNODE * node_prev;
+        struct MNODE * node_next;
+        struct MNODE * node_prev;
 
 
 }TNODE;
@@ -52,93 +57,119 @@ int menu(int action){
 
         // Generated using menu generator v1.1 (C) Grzegorz Gajewski Industries
 
-        //Generating nodes 'Objects' and setting up names:
-        TNODE MENU;
-        MENU.title="MENU";
-        TNODE SIEC;
-        SIEC.title="SIEC";
-        TNODE Numer_IP;
-        Numer_IP.title="Numer_IP";
-        TNODE RTC_SETUP;
-        RTC_SETUP.title="RTC_SETUP";
-        TNODE CZAS;
-        CZAS.title="CZAS";
-        TNODE NTP;
-        NTP.title="NTP";
-        TNODE GMT;
-        GMT.title="GMT";
-        TNODE DATA;
-        DATA.title="DATA";
-        TNODE RS232;
-        RS232.title="RS232";
-        TNODE BAUD;
-        BAUD.title="BAUD";
-        TNODE BIT;
-        BIT.title="BIT";
-        TNODE FLOW;
-        FLOW.title="FLOW";
-        TNODE EXIT;
-        EXIT.title="EXIT";
+      //Generating nodes 'Objects' and setting up names:
+      TNODE MENU_1;
+      MENU_1.title="MENU";
+      TNODE SIEC_1;
+      SIEC_1.title="SIEC";
+      TNODE BACK_1;
+      BACK_1.title="BACK";
+      TNODE Numer_IP_1;
+      Numer_IP_1.title="Numer_IP";
+      TNODE RTC_SETUP_1;
+      RTC_SETUP_1.title="RTC_SETUP";
+      TNODE BACK_2;
+      BACK_2.title="BACK";
+      TNODE CZAS_1;
+      CZAS_1.title="CZAS";
+      TNODE BACK_3;
+      BACK_3.title="BACK";
+      TNODE NTP_1;
+      NTP_1.title="NTP";
+      TNODE GMT_1;
+      GMT_1.title="GMT";
+      TNODE DATA_1;
+      DATA_1.title="DATA";
+      TNODE RS232_1;
+      RS232_1.title="RS232";
+      TNODE BACK_4;
+      BACK_4.title="BACK";
+      TNODE BAUD_1;
+      BAUD_1.title="BAUD";
+      TNODE BIT_1;
+      BIT_1.title="BIT";
+      TNODE FLOW_1;
+      FLOW_1.title="FLOW";
+      TNODE EXIT_1;
+      EXIT_1.title="EXIT";
 
-        //Generating menu node structure:
-        MENU.node_next=&null;
-        MENU.node_prev=&null;
-        SIEC.node_next=&RTC_SETUP;
-        SIEC.node_prev=&null;
-        RTC_SETUP.node_next=&RS232;
-        RTC_SETUP.node_prev=&SIEC;
-        RS232.node_next=&EXIT;
-        RS232.node_prev=&RTC_SETUP;
-        EXIT.node_next=&null;
-        EXIT.node_prev=&RS232;
-        Numer_IP.node_next=&null;
-        Numer_IP.node_prev=&null;
-        CZAS.node_next=&DATA;
-        CZAS.node_prev=&null;
-        DATA.node_next=&null;
-        DATA.node_prev=&CZAS;
-        NTP.node_next=&GMT;
-        NTP.node_prev=&null;
-        GMT.node_next=&null;
-        GMT.node_prev=&NTP;
-        BAUD.node_next=&BIT;
-        BAUD.node_prev=&null;
-        BIT.node_next=&FLOW;
-        BIT.node_prev=&BAUD;
-        FLOW.node_next=&null;
-        FLOW.node_prev=&BIT;
+      //Generating menu node structure:
+      MENU_1.node_next=&null;
+      MENU_1.node_prev=&null;
+      SIEC_1.node_next=&RTC_SETUP_1;
+      SIEC_1.node_prev=&null;
+      RTC_SETUP_1.node_next=&RS232_1;
+      RTC_SETUP_1.node_prev=&SIEC_1;
+      RS232_1.node_next=&EXIT_1;
+      RS232_1.node_prev=&RTC_SETUP_1;
+      EXIT_1.node_next=&null;
+      EXIT_1.node_prev=&RS232_1;
+      BACK_1.node_next=&Numer_IP_1;
+      BACK_1.node_prev=&null;
+      Numer_IP_1.node_next=&null;
+      Numer_IP_1.node_prev=&BACK_1;
+      BACK_2.node_next=&CZAS_1;
+      BACK_2.node_prev=&null;
+      CZAS_1.node_next=&DATA_1;
+      CZAS_1.node_prev=&BACK_2;
+      DATA_1.node_next=&null;
+      DATA_1.node_prev=&CZAS_1;
+      BACK_3.node_next=&NTP_1;
+      BACK_3.node_prev=&null;
+      NTP_1.node_next=&GMT_1;
+      NTP_1.node_prev=&BACK_3;
+      GMT_1.node_next=&null;
+      GMT_1.node_prev=&NTP_1;
+      BACK_4.node_next=&BAUD_1;
+      BACK_4.node_prev=&null;
+      BAUD_1.node_next=&BIT_1;
+      BAUD_1.node_prev=&BACK_4;
+      BIT_1.node_next=&FLOW_1;
+      BIT_1.node_prev=&BAUD_1;
+      FLOW_1.node_next=&null;
+      FLOW_1.node_prev=&BIT_1;
 
-        //Generating menu branch structure:
-        MENU.branch_next=&RTC_SETUP;
-        MENU.branch_prev=&null;
-        SIEC.branch_next=&Numer_IP;
-        SIEC.branch_prev=&MENU;
-        Numer_IP.branch_next=&null;
-        Numer_IP.branch_prev=&SIEC;
-        RTC_SETUP.branch_next=&CZAS;
-        RTC_SETUP.branch_prev=&MENU;
-        CZAS.branch_next=&NTP;
-        CZAS.branch_prev=&RTC_SETUP;
-        NTP.branch_next=&null;
-        NTP.branch_prev=&CZAS;
-        GMT.branch_next=&null;
-        GMT.branch_prev=&CZAS;
-        DATA.branch_next=&null;
-        DATA.branch_prev=&RTC_SETUP;
-        RS232.branch_next=&BAUD;
-        RS232.branch_prev=&MENU;
-        BAUD.branch_next=&null;
-        BAUD.branch_prev=&RS232;
-        BIT.branch_next=&null;
-        BIT.branch_prev=&RS232;
-        FLOW.branch_next=&null;
-        FLOW.branch_prev=&RS232;
-        EXIT.branch_next=&null;
-        EXIT.branch_prev=&MENU;
+       //Generating menu branch structure:
+      MENU_1.branch_next=&RTC_SETUP_1;
+      MENU_1.branch_prev=&null;
+      SIEC_1.branch_next=&BACK_1;
+      SIEC_1.branch_prev=&MENU_1;
+      BACK_1.branch_next=&null;
+      BACK_1.branch_prev=&SIEC_1;
+      Numer_IP_1.branch_next=&null;
+      Numer_IP_1.branch_prev=&SIEC_1;
+      RTC_SETUP_1.branch_next=&CZAS_1;
+      RTC_SETUP_1.branch_prev=&MENU_1;
+      BACK_2.branch_next=&null;
+      BACK_2.branch_prev=&RTC_SETUP_1;
+      CZAS_1.branch_next=&BACK_3;
+      CZAS_1.branch_prev=&RTC_SETUP_1;
+      BACK_3.branch_next=&null;
+      BACK_3.branch_prev=&CZAS_1;
+      NTP_1.branch_next=&null;
+      NTP_1.branch_prev=&CZAS_1;
+      GMT_1.branch_next=&null;
+      GMT_1.branch_prev=&CZAS_1;
+      DATA_1.branch_next=&null;
+      DATA_1.branch_prev=&RTC_SETUP_1;
+      RS232_1.branch_next=&BACK_4;
+      RS232_1.branch_prev=&MENU_1;
+      BACK_4.branch_next=&null;
+      BACK_4.branch_prev=&RS232_1;
+      BAUD_1.branch_next=&null;
+      BAUD_1.branch_prev=&RS232_1;
+      BIT_1.branch_next=&null;
+      BIT_1.branch_prev=&RS232_1;
+      FLOW_1.branch_next=&null;
+      FLOW_1.branch_prev=&RS232_1;
+      EXIT_1.branch_next=&null;
+      EXIT_1.branch_prev=&MENU_1;
 
+        //FUNCTIONS ASSIGNED TO NODES
+        EXIT_1.funct_prop=function_exit;
 
         if(first == 1) {
-                actual=&MENU;
+                actual=&MENU_1;
                 first=0;
         }
 
@@ -146,67 +177,75 @@ int menu(int action){
         //KONIEC DANYCH TWORZACYCH STRUKTURE
 
         //LOGIKA MENU:
-      //  printf(actual->title);
+        //  printf(actual->title);
         if (action == 1) {
                 TNODE * temp = actual->node_next;
-                if(strcmp(temp -> title, "null"))
-                    actual = actual->node_next;
+                if(strcmp(temp->title, "null"))
+                        actual = actual->node_next;
 
         }
         if(action == 0) {
-          TNODE * temp = actual->node_prev;
-          if(strcmp(temp -> title, "null"))
-                actual=actual->node_prev;
+                TNODE * temp = actual->node_prev;
+
+                if(strcmp(temp->title, "null"))
+                        actual=actual->node_prev;
+
 
         }
         if(action == 2) {
-          TNODE * temp = actual->branch_next;
-          if(strcmp(temp -> title, "null"))
-                actual = actual->branch_next;
+                TNODE * temp = actual->branch_next;
+                if(strcmp(temp->title, "null")) {
+                        actual = actual->branch_next;
+                } else {
+                        printf("Function assigned to this node should have been run: %s \n", actual->title);
+
+                        //Should run function of actions' pointer.
+                        int (*funct)(int) = actual->funct_prop;
+                        int out = (*funct)(1);
+                }
                 //menu_branch++;
 
         }
         if(action == 3) {
-          TNODE * temp = actual->branch_prev;
-          if(strcmp(temp -> title, "null"))
-                actual= actual->branch_prev;
+                TNODE * temp = actual->branch_prev;
+                if(strcmp(temp->title, "null"))
+                        actual= actual->branch_prev;
 
         }
 
         // MENU DRAWING:
 
         TNODE * temp = actual->branch_prev;
-        printf("[ %s ]\n",temp -> title);
+        printf("[ %s ]\n",temp->title);
 
         TNODE * temp2 = actual;
         TNODE * temp3 = temp2;
         TNODE * first = actual;
-        while(strcmp(temp2 -> title, "null")){
-        //  printf("Test");
-          temp3=temp2;
-          temp2 = temp2 -> node_prev;
-         if(strcmp(temp2 -> title,"null")){
-          first = temp3;
-          //printf("     %s \n", temp2 -> title);
+        while(strcmp(temp2->title, "null")) {
+                //  printf("Test");
+                temp3=temp2;
+                temp2 = temp2->node_prev;
+                if(strcmp(temp2->title,"null")) {
+                        first = temp3;
+                        //printf("     %s \n", temp2 -> title);
+                }
         }
-       }
 
         temp2 = temp3;
 
-        while(strcmp(temp2 -> title, "null")){
-        //  printf("Test");
+        while(strcmp(temp2->title, "null")) {
+                //  printf("Test");
 
+                if(strcmp(temp2->title,"null")) {
+                        if(!strcmp(temp2->title,actual->title)) {
+                                printf("  >  %s\n",actual->title);
+                        }else{
+                                printf("     %s \n", temp2->title);
+                        }
+                }
+                temp2 = temp2->node_next;
 
-          if(strcmp(temp2 -> title,"null")){
-            if(!strcmp(temp2 -> title,actual -> title)){
-              printf("  >  %s\n",actual->title);
-            }else{
-              printf("     %s \n", temp2 -> title);
-            }
         }
-        temp2 = temp2 -> node_next;
-
-       }
 
         //printf(actual->title);
 

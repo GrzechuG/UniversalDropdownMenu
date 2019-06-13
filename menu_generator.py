@@ -9,20 +9,23 @@ last_depth = "-1";
 prev_node = "null"
 higher_lord = 0;
 branches=[]
-
+nodes_origin = []
 structure = []
 for line in config.split("\n"):
      if len(line)>0:
          name=line.replace(":", "").replace(" ", "")
-         nodes.append(name)
-         print("TNODE "+name+";")
-         print(name+".title=\""+name+"\";")
+         nodes_origin.append(name)
+         fname = str(name+"_"+str(nodes_origin.count(name)));
+         nodes.append(fname)
+
+         print("TNODE "+fname+";")
+         print(fname+".title=\""+name+"\";")
          depth = (str(line.count(" ")/4))
 
 
          if(int(depth)>int(last_depth)):
              #print("More.")
-             branches.append(name)
+             branches.append(fname)
 
          if(int(depth)<int(last_depth)):
              # print("Diff:"+str(int(last_depth)-int(depth)))
@@ -48,7 +51,7 @@ for line in config.split("\n"):
 
             # print("Same.")
              branches.pop()
-             branches.append(name)
+             branches.append(fname)
 
          #print(branches)
 
@@ -89,7 +92,7 @@ for st1 in structure:
              n2=base2.pop()
             # print(st1)
              if(str(base1)==str(base2) and not n1==n2):
-
+                #print(st1)
                 tmp.append(n2)
     tmp2 = tmp[:]
     tmp2.sort()
