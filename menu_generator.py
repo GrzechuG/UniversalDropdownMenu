@@ -14,6 +14,9 @@ structure = []
 for line in config.split("\n"):
      if len(line)>0:
          name=line.replace(":", "").replace(" ", "")
+         if("|" in name):
+             name=name.split("|")[0]
+         
          nodes_origin.append(name)
          fname = str(name+"_"+str(nodes_origin.count(name)));
          nodes.append(fname)
