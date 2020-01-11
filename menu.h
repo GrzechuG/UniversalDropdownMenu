@@ -193,7 +193,7 @@ int menu(int action){
 
 
         if(first == 1) {
-                actual=&MENU_1;
+                actual=MENU_1.branch_next;
                 first=0;
         }
 
