@@ -11,12 +11,13 @@ higher_lord = 0;
 branches=[]
 nodes_origin = []
 structure = []
+first = 0;
 for line in config.split("\n"):
      if len(line)>0:
          name=line.replace(":", "").replace(" ", "")
          if("|" in name):
              name=name.split("|")[0]
-         
+
          nodes_origin.append(name)
          fname = str(name+"_"+str(nodes_origin.count(name)));
          nodes.append(fname)
@@ -24,6 +25,11 @@ for line in config.split("\n"):
          print("TNODE "+fname+";")
          print(fname+".title=\""+name+"\";")
          depth = (str(line.count(" ")/4))
+         if first == 1:
+             print("if(first == 1){")
+             print("actual = "+fname+";")
+             print("\n first = 0;\n }")
+         first+=1
 
 
          if(int(depth)>int(last_depth)):
