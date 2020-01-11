@@ -16,12 +16,16 @@ where [funcion name] must be of type void.
 #include <string.h>
 #include <stdlib.h>
 
+#define LEFT 1
+#define RIGHT 0
+#define GO_INTO 2
+#define GO_BACK 3
 
 int menu_branch = 0;
 int first=1;
-enum act{LEFT=1, RIGHT=0, GO_INTO=2, GO_BACK=3};
+//enum act{LEFT=1, RIGHT=0, GO_INTO=2, GO_BACK=3};
 
-int menu( enum act action);
+int menu( int action);
 
 // int main() {
 //         // Only for testing:
@@ -65,7 +69,7 @@ typedef struct MNODE {
 
 
 TNODE * actual;
-int menu( enum act action){
+int menu(int action){
 
 
 
@@ -256,7 +260,7 @@ int menu( enum act action){
                 temp3=temp2;
                 temp2 = temp2->node_prev;
                 if(strcmp(temp2->title,"null")) {
-                        first = temp3;
+                         //first=1; //there was first=temp3;
                         //printf("     %s \n", temp2 -> title);
                 }
         }
