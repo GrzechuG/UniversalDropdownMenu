@@ -1,4 +1,4 @@
-# Universal multi layer menu C library for microcontrollers.
+# Universal multi layer menu C++ library for microcontrollers.
 
 ## Getting started
 
@@ -13,14 +13,28 @@ The code should be inserted into menu.conf manually.
      
  The results are redirected to stdout.
      
-### The menu.h C library:
+### The menu.h C++ library:
 This is the library that can be imported simply by using:
    
          #include "menu.h"
          
-It can be used by calling menu(int action), where action can be:
+It can be used by calling myMenu menu(int action), where action can be:
         {LEFT=1, RIGHT=0, GO_INTO=2, GO_BACK=3};
-        
+  
+ 
+ The function returns a struct, containing current menu state. It has following parameters:
+     
+     string title;
+     unsigned int selected_option;
+     vector <string> options;
+     
+ That can be accessed as follows:
+     
+     myMenu m = menu(LEFT);
+     m.title;
+     m.selected_option;
+     m.options;
+     
  If there is an option that is a menu "dead end", meaning it does not lead to another option listing, 
     
 Function that is being run after node selection should be set using:
@@ -28,6 +42,8 @@ Function that is being run after node selection should be set using:
          [node name].funct_prop=[function name];
 
 where [funcion name] must be of type void.
+
+
 
         
     
