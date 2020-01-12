@@ -13,24 +13,29 @@ where [funcion name] must be of type void.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <vector> //Only in Cpp version...
+#include <string>
 #define LEFT 1
 #define RIGHT 0
 #define GO_INTO 2
 #define GO_BACK 3
-
+using namespace std;
 int menu_branch = 0;
 int first = 1;
 
-int menu(int action);
+typedef struct myMen{
+     string title;
+     unsigned int selected_option;
+     vector <string> options;
+} myMenu;
 
-void function_exit()
-{
+myMenu menu(int);
+
+void function_exit() {
     exit(0);
 }
 
-typedef struct MNODE
-{
+typedef struct MNODE {
     unsigned char id; //uint8_t
     const char *title;
     void (*funct_prop)();
@@ -43,11 +48,13 @@ typedef struct MNODE
 
 } TNODE;
 
+
+
 TNODE *actual;
 TNODE *deadEnd;
 
-int menu(int action)
-{
+myMenu menu(int action){
+    bool testPrint = false;
     TNODE null;
     null.title = "null";
     // DANE TWORZACE STRUKTURE:
@@ -59,8 +66,7 @@ int menu(int action)
     MENU_1.title = "MENU";
     TNODE SIEC_1;
     SIEC_1.title = "SIEC";
-    if (first == 1)
-    {
+    if (first == 1) {
         actual = &SIEC_1;
         deadEnd = &MENU_1;
         first = 0;
@@ -175,78 +181,78 @@ int menu(int action)
 
     // LOGIKA MENU:
 
-    if (action == LEFT)
-    {
+    if (action == LEFT) {
         TNODE *temp = actual->node_next;
         if (strcmp(temp->title, "null"))
             actual = actual->node_next;
     }
 
-    if (action == RIGHT)
-    {
+    if (action == RIGHT) {
         TNODE *temp = actual->node_prev;
 
         if (strcmp(temp->title, "null"))
             actual = actual->node_prev;
     }
 
-    if (action == GO_INTO)
-    {
+    if (action == GO_INTO) {
         TNODE *temp = actual->branch_next;
-        if (strcmp(temp->title, "null"))
-        {
+        if (strcmp(temp->title, "null")) {
             actual = actual->branch_next;
-        }
-        else
-        {
+        } else {
             printf("Function assigned to this node should have been run: %s \n", actual->title);
 
             // Should run function of actions' pointer.
 
             // WARNING! Next line is not universal.
-            if (!strcmp((actual->title), "BACK"))
-            {
+            if (!strcmp((actual->title), "BACK")) {
                 menu(GO_BACK);
-            }
-            else
-            {
+            } else {
                 (actual->funct_prop)();
             }
         }
     }
 
-    if (action == GO_BACK)
-    {
+    if (action == GO_BACK) {
         TNODE *temp = actual->branch_prev;
         if (strcmp(temp->title, deadEnd->title))
             actual = actual->branch_prev;
     }
 
     // MENU DRAWING:
+    myMenu ret;
 
+    vector <string> out;
+    int index = 0;
     TNODE *temp = actual->branch_prev;
-    printf("[ %s ]\n", temp->title);
-
+    if(testPrint)
+        printf("[ %s ]\n", temp->title);
+    ret.title = string(temp->title, strlen(temp->title));
     TNODE *temp2 = actual;
 
-    while (strcmp(temp2->node_prev->title, "null"))
-    {
+    while (strcmp(temp2->node_prev->title, "null")) {
         temp2 = temp2->node_prev;
     }
 
-    while (strcmp(temp2->title, "null"))
-    {
-        if (!strcmp(temp2->title, actual->title))
-        {
-            printf("  >  %s\n", actual->title);
+    while (strcmp(temp2->title, "null")) {
+        if (!strcmp(temp2->title, actual->title)) {
+            if(testPrint)
+                printf("  >  %s\n", actual->title);
+            ret.selected_option=index;
+            out.push_back(std::string(actual->title, strlen(actual->title)));
+        } else {
+            if(testPrint)
+                printf("     %s \n", temp2->title);
+            out.push_back(std::string(temp2->title, strlen(temp2->title)));
         }
-        else
-        {
-            printf("     %s \n", temp2->title);
-        }
+        index++;
 
         temp2 = temp2->node_next;
     }
 
-    return 0;
+    ret.options=out;
+
+
+    return ret;
 }
+
+
