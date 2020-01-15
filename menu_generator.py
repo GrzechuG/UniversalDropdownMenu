@@ -1,7 +1,31 @@
 import sys
-print("\n// Generated using menu generator v1.1 (C) Grzegorz Gajewski Industries")
-config = open("menu.conf", "r").read()
-print("\n// Generating nodes 'Objects' and setting up names:")
+
+if len(sys.argv)<=1:
+    print("Usage: python menu_generator.py [menu.conf] [menu.h]")
+    quit()
+
+menu_conf_path = sys.argv[1]
+menu_h_path  = sys.argv[2]
+
+config = open(menu_conf_path, "r").read()
+file_menu_h = open(menu_h_path, "r")
+
+injectCode = ""
+globalCode = """
+TNODE *actual;
+TNODE *deadEnd;
+
+TNODE null;
+"""
+initCode = """
+void MENU_init()
+{
+
+"""
+
+injectCode+=("\n// Generated using menu generator v2.0 (C) Grzegorz Gajewski Industries\n")
+
+injectCode+=("\n// Generating nodes 'Objects' and setting up names:\n")
 nodes = []
 sets = []
 
@@ -11,7 +35,9 @@ higher_lord = 0
 branches = []
 nodes_origin = []
 structure = []
+actual = ""
 first = 0
+
 for line in config.split("\n"):
      if len(line) > 0:
          name = line.replace(":", "").replace(" ", "")
@@ -21,15 +47,14 @@ for line in config.split("\n"):
          nodes_origin.append(name)
          fname = str(name+"_"+str(nodes_origin.count(name)))
          nodes.append(fname)
-
-         print("TNODE "+fname+";")
-         print(fname+".title = \""+name+"\";")
-         depth = (str(line.count(" ")/4))
          if first == 1:
-             print("if (first == 1)\n{")
-             print("    actual = "+fname+";")
-             print("\n    first = 0;\n}")
+             actual=fname;
+             initCode += ("null"+".title = \""+"null"+"\";\n")
          first += 1
+         globalCode+=("TNODE "+fname+"; \n")
+         initCode += (fname+".title = \""+name+"\";\n")
+         depth = (str(line.count(" ")/4))
+
 
          if(int(depth) > int(last_depth)):
              #print("More.")
@@ -110,22 +135,22 @@ for g in mini_groups:
         try:
             if(g.index(node)+1 > len(g)):
                 raise Exception
-            print(node+".node_next = &"+g[g.index(node)+1]+";")
-        except Exception as e:
-            print(node+".node_next = &"+""+"null;")
+            initCode+=(node+".node_next = &"+g[g.index(node)+1]+";\n")
+        except:
+            initCode+=(node+".node_next = &"+""+"null;\n")
             #print(str(e))
 
         try:
             if(g.index(node)-1 < 0):
                 raise Exception
-            print(node+".node_prev = &"+g[g.index(node)-1]+";")
+            initCode+=(node+".node_prev = &"+g[g.index(node)-1]+";\n")
         except:
-            print(node+".node_prev = &"+"null"+";")
+            initCode+=(node+".node_prev = &"+"null"+";\n")
 
 
 has_next = []
 has_prev = []
-print("\n// Generating menu branch structure:")
+initCode+=("\n// Generating menu branch structure:\n")
 for node in nodes:
     longest = []
 
@@ -137,14 +162,58 @@ for node in nodes:
     try:
         if(longest.index(node)+1 > len(longest)):
             raise Exception
-        print(node+".branch_next = &"+longest[longest.index(node)+1]+";")
-    except Exception as e:
-        print(node+".branch_next = &"+""+"null;")
+        initCode+=(node+".branch_next = &"+longest[longest.index(node)+1]+";\n")
+    except:
+        initCode+=(node+".branch_next = &"+""+"null;\n")
         #print(str(e))
 
     try:
         if(longest.index(node)-1 < 0):
             raise Exception
-        print(node+".branch_prev = &"+longest[longest.index(node)-1]+";")
+        initCode+=(node+".branch_prev = &"+longest[longest.index(node)-1]+";\n")
     except:
-        print(node+".branch_prev = &"+"null"+";")
+        initCode+=(node+".branch_prev = &"+"null"+";\n")
+
+print("Merged code:")
+initCode += "actual = &"+actual+";\n"
+initCode += "deadEnd = &"+"MENU_1"+";\n"
+injectCode+=globalCode+"\n //Menu structure initialization \n"+initCode+"\n}"
+
+#print(injectCode)
+
+print("Looking for // MENU STRUCTURE GENERATION START in menu.h...")
+
+file_menu_h_contents = file_menu_h.read();
+output_code = ""
+
+
+inject_finishing = False;
+for line in file_menu_h_contents.split("\n"):
+    if "MENU STRUCTURE GENERATION START" in line and line.replace(" ","").startswith("//"):
+        output_code+="//MENU STRUCTURE GENERATION START\n"
+        output_code+=injectCode+"\n"
+        inject_finishing=True
+
+    if not inject_finishing:
+        output_code+=line+"\n";
+
+    if inject_finishing:
+        if "MENU STRUCTURE GENERATION END" in line and line.replace(" ","").startswith("//"):
+            inject_finishing=False;
+            output_code+="//MENU STRUCTURE GENERATION END\n"
+
+if inject_finishing == True:
+    print("No 'MENU STRUCTURE GENERATION END' reached! exiting...")
+    quit()
+
+print(output_code)
+
+print("Writing to file...")
+
+try:
+    open(menu_h_path,"w").write(output_code)
+except Exception as e:
+    print("Exception occured:"+str(e))
+    exit(0)
+
+print("Everything done. File "+menu_h_path+" has been updated!")
