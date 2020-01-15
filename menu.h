@@ -20,7 +20,6 @@ where [funcion name] must be of type void.
 #define GO_INTO 2
 #define GO_BACK 3
 using namespace std;
-int menu_branch = 0;
 
 typedef struct myMenu
 {
@@ -28,8 +27,6 @@ typedef struct myMenu
     unsigned int selected_option;
     vector<string> options;
 } myMenu;
-
-myMenu menu(int);
 
 typedef struct TNODE
 {
@@ -45,6 +42,7 @@ typedef struct TNODE
 } TNODE;
 
 // MENU STRUCTURE GENERATION START
+
 // Generated using menu generator v1.1 (C) Grzegorz Gajewski Industries
 TNODE *actual;
 TNODE *deadEnd;
@@ -168,56 +166,44 @@ void MENU_init()
 
 void MENU_goBack()
 {
-    TNODE *temp = actual->branch_prev;
-    if (strcmp(temp->title, deadEnd->title))
+    if (strcmp(actual->branch_prev->title, deadEnd->title))
         actual = actual->branch_prev;
 }
 
 void MENU_goInto()
 {
-    TNODE *temp = actual->branch_next;
-    if (strcmp(temp->title, "null"))
+    if (strcmp(actual->branch_next->title, "null"))
     {
         actual = actual->branch_next;
     }
     else
     {
         printf("Function assigned to this node should have been run: %s \n", actual->title);
-
         // Should run function of actions' pointer.
-
         // WARNING! Next line is not universal.
         if (!strcmp((actual->title), "BACK"))
-        {
             MENU_goBack();
-        }
         else
-        {
             (actual->funct_prop)();
-        }
     }
 }
 
 void MENU_selectNext()
 {
-    TNODE *temp = actual->node_next;
-    if (strcmp(temp->title, "null"))
+    if (strcmp(actual->node_next->title, "null"))
         actual = actual->node_next;
 }
 
 void MENU_selectPrevious()
 {
-    TNODE *temp = actual->node_prev;
-    if (strcmp(temp->title, "null"))
+    if (strcmp(actual->node_prev->title, "null"))
         actual = actual->node_prev;
 }
 
 myMenu MENU_getStructure()
 {
 
-    // MENU DRAWING:
     myMenu ret;
-
     vector<string> out;
     int index = 0;
     TNODE *temp = actual->branch_prev;
@@ -233,14 +219,9 @@ myMenu MENU_getStructure()
     while (strcmp(temp2->title, "null"))
     {
         if (!strcmp(temp2->title, actual->title))
-        {
             ret.selected_option = index;
-            out.push_back(std::string(actual->title, strlen(actual->title)));
-        }
-        else
-        {
-            out.push_back(std::string(temp2->title, strlen(temp2->title)));
-        }
+            
+        out.push_back(std::string(temp2->title, strlen(temp2->title)));
         index++;
 
         temp2 = temp2->node_next;
