@@ -20,87 +20,72 @@ where [funcion name] must be of type void.
 #define GO_INTO 2
 #define GO_BACK 3
 using namespace std;
-int menu_branch = 0;
-int first = 1;
 
-typedef struct myMen{
-     string title;
-     unsigned int selected_option;
-     vector <string> options;
+typedef struct myMenu
+{
+    string title;
+    unsigned int selected_option;
+    vector<string> options;
 } myMenu;
 
-myMenu menu(int);
-
-void function_exit() {
-    exit(0);
-}
-
-typedef struct MNODE {
+typedef struct TNODE
+{
     unsigned char id; //uint8_t
     const char *title;
     void (*funct_prop)();
 
-    struct MNODE *branch_next;
-    struct MNODE *branch_prev;
+    TNODE *branch_next;
+    TNODE *branch_prev;
 
-    struct MNODE *node_next;
-    struct MNODE *node_prev;
-
+    TNODE *node_next;
+    TNODE *node_prev;
 } TNODE;
 
+// MENU STRUCTURE GENERATION START
 
-
+// Generated using menu generator v1.1 (C) Grzegorz Gajewski Industries
 TNODE *actual;
 TNODE *deadEnd;
 
-myMenu menu(int action){
-    bool testPrint = false;
-    TNODE null;
-    null.title = "null";
-    // DANE TWORZACE STRUKTURE:
+TNODE null;
+TNODE MENU_1;
+TNODE SIEC_1;
+TNODE BACK_1;
+TNODE Numer_IP_1;
+TNODE RTC_SETUP_1;
+TNODE BACK_2;
+TNODE CZAS_1;
+TNODE BACK_3;
+TNODE NTP_1;
+TNODE GMT_1;
+TNODE DATA_1;
+TNODE RS232_1;
+TNODE BACK_4;
+TNODE BAUD_1;
+TNODE BIT_1;
+TNODE FLOW_1;
+TNODE EXIT_1;
 
-    // Generated using menu generator v1.1 (C) Grzegorz Gajewski Industries
-
-    // Generating nodes 'Objects' and setting up names:
-    TNODE MENU_1;
+void MENU_init()
+{
     MENU_1.title = "MENU";
-    TNODE SIEC_1;
     SIEC_1.title = "SIEC";
-    if (first == 1) {
-        actual = &SIEC_1;
-        deadEnd = &MENU_1;
-        first = 0;
-    }
-    TNODE BACK_1;
     BACK_1.title = "BACK";
-    TNODE Numer_IP_1;
     Numer_IP_1.title = "Numer_IP";
-    TNODE RTC_SETUP_1;
     RTC_SETUP_1.title = "RTC_SETUP";
-    TNODE BACK_2;
     BACK_2.title = "BACK";
-    TNODE CZAS_1;
     CZAS_1.title = "CZAS";
-    TNODE BACK_3;
     BACK_3.title = "BACK";
-    TNODE NTP_1;
     NTP_1.title = "NTP";
-    TNODE GMT_1;
     GMT_1.title = "GMT";
-    TNODE DATA_1;
     DATA_1.title = "DATA";
-    TNODE RS232_1;
     RS232_1.title = "RS232";
-    TNODE BACK_4;
     BACK_4.title = "BACK";
-    TNODE BAUD_1;
-    BAUD_1.title = "BAUD";
-    TNODE BIT_1;
     BIT_1.title = "BIT";
-    TNODE FLOW_1;
     FLOW_1.title = "FLOW";
-    TNODE EXIT_1;
     EXIT_1.title = "EXIT";
+    null.title = "null";
+    BAUD_1.title = "BAUD";
 
     // Generating menu node structure:
     MENU_1.node_next = &null;
@@ -174,85 +159,75 @@ myMenu menu(int action){
     EXIT_1.branch_next = &null;
     EXIT_1.branch_prev = &MENU_1;
 
-    // FUNCTIONS ASSIGNED TO NODES
-    EXIT_1.funct_prop = function_exit;
+    actual = &SIEC_1;
+    deadEnd = &MENU_1;
+}
+// MENU  STRUCTURE GENERATION END
 
-    // KONIEC DANYCH TWORZACYCH STRUKTURE
+void MENU_goBack()
+{
+    if (strcmp(actual->branch_prev->title, deadEnd->title))
+        actual = actual->branch_prev;
+}
 
-    // LOGIKA MENU:
-
-    if (action == LEFT) {
-        TNODE *temp = actual->node_next;
-        if (strcmp(temp->title, "null"))
-            actual = actual->node_next;
+void MENU_goInto()
+{
+    if (strcmp(actual->branch_next->title, "null"))
+    {
+        actual = actual->branch_next;
     }
-
-    if (action == RIGHT) {
-        TNODE *temp = actual->node_prev;
-
-        if (strcmp(temp->title, "null"))
-            actual = actual->node_prev;
+    else
+    {
+        printf("Function assigned to this node should have been run: %s \n", actual->title);
+        // Should run function of actions' pointer.
+        // WARNING! Next line is not universal.
+        if (!strcmp((actual->title), "BACK"))
+            MENU_goBack();
+        else
+            (actual->funct_prop)();
     }
+}
 
-    if (action == GO_INTO) {
-        TNODE *temp = actual->branch_next;
-        if (strcmp(temp->title, "null")) {
-            actual = actual->branch_next;
-        } else {
-            printf("Function assigned to this node should have been run: %s \n", actual->title);
+void MENU_selectNext()
+{
+    if (strcmp(actual->node_next->title, "null"))
+        actual = actual->node_next;
+}
 
-            // Should run function of actions' pointer.
+void MENU_selectPrevious()
+{
+    if (strcmp(actual->node_prev->title, "null"))
+        actual = actual->node_prev;
+}
 
-            // WARNING! Next line is not universal.
-            if (!strcmp((actual->title), "BACK")) {
-                menu(GO_BACK);
-            } else {
-                (actual->funct_prop)();
-            }
-        }
-    }
+myMenu MENU_getStructure()
+{
 
-    if (action == GO_BACK) {
-        TNODE *temp = actual->branch_prev;
-        if (strcmp(temp->title, deadEnd->title))
-            actual = actual->branch_prev;
-    }
-
-    // MENU DRAWING:
     myMenu ret;
-
-    vector <string> out;
+    vector<string> out;
     int index = 0;
     TNODE *temp = actual->branch_prev;
-    if(testPrint)
-        printf("[ %s ]\n", temp->title);
+
     ret.title = string(temp->title, strlen(temp->title));
     TNODE *temp2 = actual;
 
-    while (strcmp(temp2->node_prev->title, "null")) {
+    while (strcmp(temp2->node_prev->title, "null"))
+    {
         temp2 = temp2->node_prev;
     }
 
-    while (strcmp(temp2->title, "null")) {
-        if (!strcmp(temp2->title, actual->title)) {
-            if(testPrint)
-                printf("  >  %s\n", actual->title);
-            ret.selected_option=index;
-            out.push_back(std::string(actual->title, strlen(actual->title)));
-        } else {
-            if(testPrint)
-                printf("     %s \n", temp2->title);
-            out.push_back(std::string(temp2->title, strlen(temp2->title)));
-        }
+    while (strcmp(temp2->title, "null"))
+    {
+        if (!strcmp(temp2->title, actual->title))
+            ret.selected_option = index;
+            
+        out.push_back(std::string(temp2->title, strlen(temp2->title)));
         index++;
 
         temp2 = temp2->node_next;
     }
 
-    ret.options=out;
-
+    ret.options = out;
 
     return ret;
 }
-
-
