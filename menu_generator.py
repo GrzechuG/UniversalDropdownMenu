@@ -88,7 +88,7 @@ for line in config.split("\n"):
 highest = 0
 #print("#######################SORTED#########################")
 
-print("\n// Generating menu node structure:")
+sys.stdout.write("Generating menu node structure...")
 for st in structure:
     #print(st)
     if(len(st) > highest):
@@ -147,7 +147,7 @@ for g in mini_groups:
         except:
             initCode+=(node+".node_prev = &"+"null"+";\n")
 
-
+print("OK")
 has_next = []
 has_prev = []
 initCode+=("\n// Generating menu branch structure:\n")
@@ -174,24 +174,31 @@ for node in nodes:
     except:
         initCode+=(node+".branch_prev = &"+"null"+";\n")
 
-print("Merged code:")
+#print("Merged code:")
 initCode += "actual = &"+actual+";\n"
 initCode += "deadEnd = &"+"MENU_1"+";\n"
 injectCode+=globalCode+"\n //Menu structure initialization \n"+initCode+"\n}"
 
 #print(injectCode)
 
-print("Looking for // MENU STRUCTURE GENERATION START in menu.h...")
+sys.stdout.write("Looking for MENU STRUCTURE GENERATION START in menu.h... ")
 
 file_menu_h_contents = file_menu_h.read();
 output_code = ""
 
 
 inject_finishing = False;
+beginFound = False;
 for line in file_menu_h_contents.split("\n"):
     if "MENU STRUCTURE GENERATION START" in line and line.replace(" ","").startswith("//"):
+        print("OK")
+        sys.stdout.write("Replaceing menu code... ")
+        beginFound = True
+
         output_code+="//MENU STRUCTURE GENERATION START\n"
         output_code+=injectCode+"\n"
+        print("OK")
+        sys.stdout.write("Looking for MENU STRUCTURE GENERATION END in menu.h... ")
         inject_finishing=True
 
     if not inject_finishing:
@@ -201,19 +208,30 @@ for line in file_menu_h_contents.split("\n"):
         if "MENU STRUCTURE GENERATION END" in line and line.replace(" ","").startswith("//"):
             inject_finishing=False;
             output_code+="//MENU STRUCTURE GENERATION END\n"
+            print("OK")
+
+if not beginFound:
+    print("FAILED")
+    print("Could not find '//MENU STRUCTURE GENERATION START'... ")
+    print("Nothing to be done... exiting")
+    quit()
 
 if inject_finishing == True:
+    print("FAILED")
     print("No 'MENU STRUCTURE GENERATION END' reached! exiting...")
     quit()
 
-print(output_code)
+#print(output_code)
 
-print("Writing to file...")
+sys.stdout.write("Writing to file...")
 
 try:
     open(menu_h_path,"w").write(output_code)
+    print("OK")
 except Exception as e:
+    print("FAILED")
     print("Exception occured:"+str(e))
     exit(0)
+
 
 print("Everything done. File "+menu_h_path+" has been updated!")
