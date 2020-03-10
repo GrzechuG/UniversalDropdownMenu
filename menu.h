@@ -182,15 +182,13 @@ void MENU_goInto()
     {
         actual = actual->branch_next;
     }
-    else
+    else if (!strcmp((actual->title), "BACK"))
     {
-        printf("Function assigned to this node should have been run: %s \n", actual->title);
-        // Should run function of actions' pointer.
-        // WARNING! Next line is not universal.
-        if (!strcmp((actual->title), "BACK"))
-            MENU_goBack();
-        else
-            (actual->funct_prop)();
+        MENU_goBack();
+    }
+    else if (actual->funct_prop != NULL)
+    {
+        (actual->funct_prop)();
     }
 }
 
