@@ -15,10 +15,7 @@ where [funcion name] must be of type void.
 #include <stdlib.h>
 #include <vector> //Only in Cpp version...
 #include <string>
-#define LEFT 1
-#define RIGHT 0
-#define GO_INTO 2
-#define GO_BACK 3
+
 using namespace std;
 
 typedef struct mMenu {
@@ -60,6 +57,7 @@ TNODE CZAS_1;
 TNODE BACK_3; 
 TNODE NTP_1; 
 TNODE GMT_1; 
+TNODE GRZES_1; 
 TNODE DATA_1; 
 TNODE RS232_1; 
 TNODE BACK_4; 
@@ -84,6 +82,7 @@ CZAS_1.title = "CZAS";
 BACK_3.title = "BACK";
 NTP_1.title = "NTP";
 GMT_1.title = "GMT";
+GRZES_1.title = "GRZES";
 DATA_1.title = "DATA";
 RS232_1.title = "RS232";
 BACK_4.title = "BACK";
@@ -107,10 +106,12 @@ Numer_IP_1.node_next = &null;
 Numer_IP_1.node_prev = &BACK_1;
 BACK_2.node_next = &CZAS_1;
 BACK_2.node_prev = &null;
-CZAS_1.node_next = &DATA_1;
+CZAS_1.node_next = &GRZES_1;
 CZAS_1.node_prev = &BACK_2;
+GRZES_1.node_next = &DATA_1;
+GRZES_1.node_prev = &CZAS_1;
 DATA_1.node_next = &null;
-DATA_1.node_prev = &CZAS_1;
+DATA_1.node_prev = &GRZES_1;
 BACK_3.node_next = &NTP_1;
 BACK_3.node_prev = &null;
 NTP_1.node_next = &GMT_1;
@@ -147,6 +148,8 @@ NTP_1.branch_next = &null;
 NTP_1.branch_prev = &CZAS_1;
 GMT_1.branch_next = &null;
 GMT_1.branch_prev = &CZAS_1;
+GRZES_1.branch_next = &null;
+GRZES_1.branch_prev = &RTC_SETUP_1;
 DATA_1.branch_next = &null;
 DATA_1.branch_prev = &RTC_SETUP_1;
 RS232_1.branch_next = &BACK_4;
@@ -236,6 +239,8 @@ myMenu MENU_getStructure()
 
     return ret;
 }
+
+
 
 
 
